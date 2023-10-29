@@ -30,9 +30,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
-        Vector2 movement = new Vector2(movementX, movementY);
-        rb.AddForce(movement * walkSpeed);
+
+        int jump_scalar = 0;
+        if (gameObject.transform.position.y == 1)
+        {
+            jump_scalar = 30;
+        }
+        Vector2 movement = new Vector2(movementX * 10, movementY * 30);
+        rb.AddForce(movement);
     }
 
     
