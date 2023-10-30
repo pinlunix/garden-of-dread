@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
@@ -24,13 +26,14 @@ public class PlayerMovement : MonoBehaviour
     void OnMove(InputValue movementValue) {
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
-        movementY = movementVector.y; 
+        movementY = movementVector.y;
+        Debug.Log(rb.velocity);
+        Debug.Log("moving");
     }
 
 
     private void FixedUpdate()
     {
-
         int jump_scalar = 0;
         if (gameObject.transform.position.y == 1)
         {
