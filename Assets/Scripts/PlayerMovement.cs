@@ -15,17 +15,21 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveDir;
     private float movementX;
     private float movementY;
+    private bool isFacingRight = true;
 
-    [SerializeField] private float jumpForce = 10;
-
+    [Header("Vertical Movement")]
     private bool doubleJump;
-        
+    private float jumpingPower = 16f;
+
+    [Header("Dash Settings")]
+    private bool dashed = false;
     private bool canDash = true;
-    private bool isDashing;
+    private bool isDashing = false;
     private float dashingPower = 24f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 0.2f;
-  
+    
+
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheckPoint;    // use as origin
     [SerializeField] private float groundCheckY = 0.2f;     // define distance of ray
@@ -36,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
 
     private float horizontal;
-    private float jumpingPower = 16f;
+    
 
     public static PlayerMovement Instance;
 
@@ -59,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()            // jump movement
     {
+        // prevent other movements from interrupting Dash
         if (isDashing)
         {
             return;
@@ -66,14 +71,110 @@ public class PlayerMovement : MonoBehaviour
 
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Grounded() && !Input.GetButton("Jump"))
+        StartDash();
+
+        if (horizontal > 0 && !isFacingRight)
         {
-            doubleJump = false;
-         
+            Flip();
+        }
+        if (horizontal < 0 && isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    // Update is called once per frame
+    private void FixedUpdate()
+    {
+        if (isDashing)
+        {
+            return;
         }
 
+        //Vector2 movement = new Vector2(movementX * 10, movementY * 10);
+        //rb.AddForce(movement);
+        
+        // constant movement, no momentum or sliding
+        rb.velocity = new Vector2(horizontal * walkSpeed, rb.velocity.y);
+    }
+
+    // handles dashing left or right direction
+    private void Flip()
+    {
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+
+        isFacingRight = !isFacingRight;
+    }
+
+    void StartDash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !dashed)
+        {
+            StartCoroutine(Dash());
+            dashed = true;
+            Debug.Log("Dashing");
+        }
+
+        if (Grounded())
+        {
+            dashed = false;
+        }
+    }
+
+    private IEnumerator Dash()                //dash
+    {
+        canDash = false;
+        isDashing = true;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0;    // dash forward without falling
+        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+        tr.emitting = true;     // emit trail while dashing
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;    // stop trail emission after dash finishes
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    }
+
+
+    void OnMove(InputValue movementValue)
+    {
+        Vector2 movementVector = movementValue.Get<Vector2>();
+        movementX = movementVector.x;
+        movementY = movementVector.y;
+        Debug.Log("moving");
+        Debug.Log(rb.velocity);
+    }
+
+    void OnJump()
+    {
+        /*
+        // if player is on the ground
+        if (Grounded())
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce);
+            Debug.Log("Jumped");
+        }
+        // if player is not on the ground (GetButtonUp("Jump")) and is moving in y direction (up)
+        // jump-cancel
+        if (!Grounded() && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+        }
+        */
+
+        // If on the ground and not pressing jump
+        if (Grounded() && !Input.GetButtonDown("Jump"))
+        {
+            doubleJump = true;
+        }
+        // if pressing jump
         if (Input.GetButtonDown("Jump"))
         {
+            // if on the ground or doubleJump is true
             if (Grounded() || doubleJump)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
@@ -82,74 +183,12 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Jumped");
             }
         }
-
+        // if jump button released and player is moving on y axis
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
-            
-       if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-        {
-            StartCoroutine(Dash());
-        }
     }
-
-   //void OnJump()
-    //{
-    //    if (Grounded())
-    //    {
-    //        rb.velocity = new Vector3(rb.velocity.x, jumpForce);
-    //        Debug.Log("Jumped");
-    //    }
-    //    if (!Grounded() && rb.velocity.y > 0)
-    //    {
-    //        rb.velocity = new Vector2(rb.velocity.x, 0);
-    //    }
-    //}
-
-    private IEnumerator Dash()                //dash
-    {
-        canDash = false;
-        isDashing = true;
-        float originalGravity = rb.gravityScale;
-        rb.gravityScale = 2;
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0);
-        tr.emitting = true;
-        yield return new WaitForSeconds(dashingTime);
-        tr.emitting = false;
-        rb.gravityScale = 2;
-        isDashing = false;
-        yield return new WaitForSeconds(dashingCooldown);
-        canDash = true;
-    }
-
-    // Update is called once per frame
-    private void FixedUpdate()
-    {
-        //int jump_scalar = 0;
-        //if (gameObject.transform.position.y == 1)
-        //{
-        //    jump_scalar = 10;
-        //}
-        Vector2 movement = new Vector2(movementX * 10, movementY * 10);
-        rb.AddForce(movement);
-
-        if (isDashing)
-        {
-            return;
-        }
-    }
-
-    void OnMove(InputValue movementValue)
-    {
-        Vector2 movementVector = movementValue.Get<Vector2>();
-        movementX = movementVector.x;
-        movementY = movementVector.y;
-        Debug.Log(rb.velocity);
-        Debug.Log("moving");
-    }
-
-
 
     public bool Grounded()
     {
