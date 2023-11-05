@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Vertical Movement")]
     private bool doubleJump;
-    private float jumpingPower = 16f;
+    private float jumpingPower = 9f;
 
     [Header("Dash Settings")]
     private bool dashed = false;
