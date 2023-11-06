@@ -6,6 +6,7 @@ using Debug = UnityEngine.Debug;
 using UnityEngine.InputSystem;
 using System.Security.Cryptography;
 using System.Collections.Specialized;
+using UnityEditor;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -40,6 +41,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;        // detect game objects on ground layer
     [SerializeField] private TrailRenderer tr;
 
+
+
+
+
+
+    private float timeBetweenAttack = 2.0f;
+    private float timeSinceAttck;
+
+
+
     Rigidbody2D rb;
 
     private float horizontal;
@@ -68,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()            // jump movement
     {
+        
         // prevent other movements from interrupting Dash
         if (isDashing)
         {
@@ -150,10 +162,17 @@ public class PlayerMovement : MonoBehaviour
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
+        anim.SetBool("isRunning", true);
         Debug.Log("moving");
         Debug.Log(rb.velocity);
-        anim.SetBool("isRunning", rb.velocity.x != 0 && Grounded());
     }
+
+    void OnFire(InputValue fireValue)
+    {
+        // anim.SetBool("isAttacking", true);
+    }
+
+    
 
     void OnJump()
     {
@@ -193,8 +212,8 @@ public class PlayerMovement : MonoBehaviour
         // if jump button released and player is moving on y axis
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
+            anim.SetBool("isJumping", true);
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            anim.SetBool("isJumping", !Grounded());
         }
     }
 
@@ -204,13 +223,16 @@ public class PlayerMovement : MonoBehaviour
             || Physics2D.Raycast(groundCheckPoint.position + new Vector3(groundCheckX, 0, 0), Vector2.down, groundCheckY, whatIsGround)
             || Physics2D.Raycast(groundCheckPoint.position + new Vector3(-groundCheckX, 0, 0), Vector2.down, groundCheckY, whatIsGround))
         {
+            anim.SetBool("isJumping", false);
             return true;
         }
         else
         {
+            anim.SetBool("isJumping", true);
             return false;
         }
     }
 
     
+
 }
