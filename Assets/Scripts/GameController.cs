@@ -23,6 +23,10 @@ public class GameController : MonoBehaviour
         {
             Die();
         }
+        if (collision.CompareTag("Mob"))
+        {
+            Die();
+        }
     }
 
     void Die()

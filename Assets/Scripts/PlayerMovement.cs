@@ -46,8 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    private float timeBetweenAttack = 2.0f;
-    private float timeSinceAttck;
+    private int count = 0;
 
 
 
@@ -162,14 +161,31 @@ public class PlayerMovement : MonoBehaviour
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
-        anim.SetBool("isRunning", true);
+        if(movementX != 0f)
+        {
+            anim.SetBool("isAttacking", false);
+            anim.SetBool("isRunning", true);
+
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
+        }
         Debug.Log("moving");
         Debug.Log(rb.velocity);
     }
 
     void OnFire(InputValue fireValue)
     {
-        // anim.SetBool("isAttacking", true);
+        count = count + 1;
+        if (count % 2 == 1)
+        {
+            anim.SetBool("isAttacking", true);
+        }
+        else
+        {
+            anim.SetBool("isAttacking", false);
+        }
     }
 
     
@@ -229,6 +245,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             anim.SetBool("isJumping", true);
+            anim.SetBool("isAttacking", false);
             return false;
         }
     }
