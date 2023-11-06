@@ -28,6 +28,9 @@ public class PlayerMovement : MonoBehaviour
     private float dashingPower = 24f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 0.2f;
+
+
+    
     
 
     [Header("Ground Check")]
@@ -40,7 +43,8 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
 
     private float horizontal;
-    
+    private Animator anim;
+
 
     public static PlayerMovement Instance;
 
@@ -59,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()            // jump movement
@@ -147,6 +152,7 @@ public class PlayerMovement : MonoBehaviour
         movementY = movementVector.y;
         Debug.Log("moving");
         Debug.Log(rb.velocity);
+        anim.SetBool("isRunning", rb.velocity.x != 0 && Grounded());
     }
 
     void OnJump()
@@ -174,6 +180,7 @@ public class PlayerMovement : MonoBehaviour
         // if pressing jump
         if (Input.GetButtonDown("Jump"))
         {
+            
             // if on the ground or doubleJump is true
             if (Grounded() || doubleJump)
             {
@@ -187,6 +194,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            anim.SetBool("isJumping", !Grounded());
         }
     }
 
