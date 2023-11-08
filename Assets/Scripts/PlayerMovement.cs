@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveDir;
     private float movementX;
     private float movementY;
-    private bool isFacingRight = true;
 
     [Header("Vertical Movement")]
     private bool doubleJump;
@@ -29,9 +28,6 @@ public class PlayerMovement : MonoBehaviour
     private float dashingPower = 24f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 0.2f;
-
-
-    
     
 
     [Header("Ground Check")]
@@ -43,15 +39,11 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-
-
-
     private int count = 0;
 
 
-
+    [Header("References")]
     Rigidbody2D rb;
-
     private float horizontal;
     private Animator anim;
 
@@ -88,15 +80,7 @@ public class PlayerMovement : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
 
         StartDash();
-
-        if (horizontal > 0 && !isFacingRight)
-        {
-            Flip();
-        }
-        if (horizontal < 0 && isFacingRight)
-        {
-            Flip();
-        }
+        Flip();
     }
 
     // Update is called once per frame
@@ -117,11 +101,14 @@ public class PlayerMovement : MonoBehaviour
     // handles dashing left or right direction
     private void Flip()
     {
-        Vector3 currentScale = gameObject.transform.localScale;
-        currentScale.x *= -1;
-        gameObject.transform.localScale = currentScale;
-
-        isFacingRight = !isFacingRight;
+        if(horizontal < 0)
+        {
+            transform.localScale = new Vector2(-1, transform.localScale.y);
+        }
+        else if (horizontal > 0)
+        {
+            transform.localScale = new Vector2(1, transform.localScale.y);
+        }
     }
 
     void StartDash()
@@ -161,18 +148,11 @@ public class PlayerMovement : MonoBehaviour
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
-        if(movementX != 0f)
-        {
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isRunning", true);
 
-        }
-        else
-        {
-            anim.SetBool("isRunning", false);
-        }
+        anim.SetBool("isRunning", movementX != 0 && Grounded());
+
         Debug.Log("moving");
-        Debug.Log(rb.velocity);
+        Debug.Log(rb.velocity.x);
     }
 
     void OnFire(InputValue fireValue)
@@ -228,9 +208,10 @@ public class PlayerMovement : MonoBehaviour
         // if jump button released and player is moving on y axis
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
-            anim.SetBool("isJumping", true);
+            //anim.SetBool("isJumping", true);
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
+        anim.SetBool("isJumping", !Grounded());
     }
 
     public bool Grounded()
