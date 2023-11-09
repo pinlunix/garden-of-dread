@@ -37,15 +37,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;        // detect game objects on ground layer
     [SerializeField] private TrailRenderer tr;
 
+    [Header("Attack Settings")]
+    [SerializeField] private Transform AttackTransform;
+    [SerializeField] private Vector2 AttackArea;
+    [SerializeField] private LayerMask attackableLayer;
+    [SerializeField] private float damage;                  // damage player does to enemy
 
 
     private int count = 0;
 
-
     [Header("References")]
     Rigidbody2D rb;
-    private float horizontal;
+    private float horizontal, vertical;
     private Animator anim;
+    private GameObject attackArea = default;
 
 
     public static PlayerMovement Instance;
@@ -66,6 +71,8 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        attackArea = transform.GetChild(0).gameObject;
     }
 
     private void Update()            // jump movement
@@ -78,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
 
         StartDash();
         Flip();
@@ -98,7 +106,13 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(horizontal * walkSpeed, rb.velocity.y);
     }
 
-    // handles dashing left or right direction
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(AttackTransform.position, AttackArea);
+    }
+
+    // handles moving left or right direction
     private void Flip()
     {
         if(horizontal < 0)
@@ -154,9 +168,10 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("moving");
         Debug.Log(rb.velocity.x);
     }
-
-    void OnFire(InputValue fireValue)
+    
+    void OnAttack()
     {
+        /*
         count = count + 1;
         if (count % 2 == 1)
         {
@@ -166,27 +181,30 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("isAttacking", false);
         }
+        */
+        //anim.SetTrigger("isAttacking");
+        Debug.Log("Attacking");
+        Hit(AttackTransform, AttackArea);
     }
+    
+    void Hit(Transform _attackTransform, Vector2 _attackArea)
+    {
+        Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
+        
+        for (int i = 0; i < objectsToHit.Length; i++)
+        {
+            if (objectsToHit[i].GetComponent<Enemy>() != null)
+            {
+                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage);
+                Debug.Log("Hit");
+            }
+        }
 
+    }
     
 
     void OnJump()
     {
-        /*
-        // if player is on the ground
-        if (Grounded())
-        {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce);
-            Debug.Log("Jumped");
-        }
-        // if player is not on the ground (GetButtonUp("Jump")) and is moving in y direction (up)
-        // jump-cancel
-        if (!Grounded() && rb.velocity.y > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-        }
-        */
-
         // If on the ground and not pressing jump
         if (Grounded() && !Input.GetButtonDown("Jump"))
         {
