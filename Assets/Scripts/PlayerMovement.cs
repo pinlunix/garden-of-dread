@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveDir;
     private float movementX;
     private float movementY;
-    private bool isFacingRight = true;
 
     [Header("Vertical Movement")]
     private bool doubleJump;
@@ -29,9 +28,6 @@ public class PlayerMovement : MonoBehaviour
     private float dashingPower = 24f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 0.2f;
-
-
-    
     
 
     [Header("Ground Check")]
@@ -41,19 +37,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;        // detect game objects on ground layer
     [SerializeField] private TrailRenderer tr;
 
-
-
-
+    [Header("Attack Settings")]
+    [SerializeField] private Transform AttackTransform;
+    [SerializeField] private Vector2 AttackArea;
+    [SerializeField] private LayerMask attackableLayer;
+    [SerializeField] private float damage;                  // damage player does to enemy
 
 
     private int count = 0;
 
-
-
+    [Header("References")]
     Rigidbody2D rb;
-
-    private float horizontal;
+    private float horizontal, vertical;
     private Animator anim;
+    private GameObject attackArea = default;
 
 
     public static PlayerMovement Instance;
@@ -74,6 +71,8 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        attackArea = transform.GetChild(0).gameObject;
     }
 
     private void Update()            // jump movement
@@ -86,17 +85,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
 
         StartDash();
-
-        if (horizontal > 0 && !isFacingRight)
-        {
-            Flip();
-        }
-        if (horizontal < 0 && isFacingRight)
-        {
-            Flip();
-        }
+        Flip();
     }
 
     // Update is called once per frame
@@ -114,14 +106,23 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(horizontal * walkSpeed, rb.velocity.y);
     }
 
-    // handles dashing left or right direction
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(AttackTransform.position, AttackArea);
+    }
+
+    // handles moving left or right direction
     private void Flip()
     {
-        Vector3 currentScale = gameObject.transform.localScale;
-        currentScale.x *= -1;
-        gameObject.transform.localScale = currentScale;
-
-        isFacingRight = !isFacingRight;
+        if(horizontal < 0)
+        {
+            transform.localScale = new Vector2(-1, transform.localScale.y);
+        }
+        else if (horizontal > 0)
+        {
+            transform.localScale = new Vector2(1, transform.localScale.y);
+        }
     }
 
     void StartDash()
@@ -161,22 +162,16 @@ public class PlayerMovement : MonoBehaviour
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
-        if(movementX != 0f)
-        {
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isRunning", true);
 
-        }
-        else
-        {
-            anim.SetBool("isRunning", false);
-        }
+        anim.SetBool("isRunning", movementX != 0 && Grounded());
+
         Debug.Log("moving");
-        Debug.Log(rb.velocity);
+        Debug.Log(rb.velocity.x);
     }
-
-    void OnFire(InputValue fireValue)
+    
+    void OnAttack()
     {
+        /*
         count = count + 1;
         if (count % 2 == 1)
         {
@@ -186,27 +181,30 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("isAttacking", false);
         }
+        */
+        //anim.SetTrigger("isAttacking");
+        Debug.Log("Attacking");
+        Hit(AttackTransform, AttackArea);
     }
+    
+    void Hit(Transform _attackTransform, Vector2 _attackArea)
+    {
+        Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
+        
+        for (int i = 0; i < objectsToHit.Length; i++)
+        {
+            if (objectsToHit[i].GetComponent<Enemy>() != null)
+            {
+                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage);
+                Debug.Log("Hit");
+            }
+        }
 
+    }
     
 
     void OnJump()
     {
-        /*
-        // if player is on the ground
-        if (Grounded())
-        {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce);
-            Debug.Log("Jumped");
-        }
-        // if player is not on the ground (GetButtonUp("Jump")) and is moving in y direction (up)
-        // jump-cancel
-        if (!Grounded() && rb.velocity.y > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-        }
-        */
-
         // If on the ground and not pressing jump
         if (Grounded() && !Input.GetButtonDown("Jump"))
         {
@@ -228,9 +226,10 @@ public class PlayerMovement : MonoBehaviour
         // if jump button released and player is moving on y axis
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
-            anim.SetBool("isJumping", true);
+            //anim.SetBool("isJumping", true);
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
+        anim.SetBool("isJumping", !Grounded());
     }
 
     public bool Grounded()

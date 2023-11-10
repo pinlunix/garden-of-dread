@@ -12,7 +12,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Attackable
   - 
   - 
   - 
@@ -41,4 +41,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Attackable
+    uniqueID: 2475950075
     locked: 0
