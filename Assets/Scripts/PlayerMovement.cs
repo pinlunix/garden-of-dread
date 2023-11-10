@@ -89,6 +89,11 @@ public class PlayerMovement : MonoBehaviour
 
         StartDash();
         Flip();
+
+        if (Input.GetButtonUp("Attack"))
+        {
+            anim.ResetTrigger("isAttacking");
+        }
     }
 
     // Update is called once per frame
@@ -182,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("isAttacking", false);
         }
         */
-        //anim.SetTrigger("isAttacking");
+        anim.SetTrigger("isAttacking");
         Debug.Log("Attacking");
         Hit(AttackTransform, AttackArea);
     }
@@ -244,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             anim.SetBool("isJumping", true);
-            anim.SetBool("isAttacking", false);
+            //anim.SetBool("isAttacking", false);
             return false;
         }
     }
