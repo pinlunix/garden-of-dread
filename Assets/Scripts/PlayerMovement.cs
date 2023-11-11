@@ -143,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
 
     void StartDash()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !dashed)
+        if (Input.GetButtonDown("Dash") && canDash && !dashed)
         {
             StartCoroutine(Dash());
             dashed = true;
