@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 using System.Security.Cryptography;
 using System.Collections.Specialized;
 using UnityEditor;
+using System;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -43,17 +45,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask attackableLayer;
     [SerializeField] private float damage;                  // damage player does to enemy
 
-
-    private int count = 0;
-
     [Header("References")]
     Rigidbody2D rb;
     private float horizontal, vertical;
     private Animator anim;
     private GameObject attackArea = default;
-
+    private int coincount;
+    public int count;
 
     public static PlayerMovement Instance;
+
+    public CoinManager cm;
+    public TextMeshProUGUI coinText;
+  
 
     private void Awake()
     {
@@ -73,6 +77,10 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
 
         attackArea = transform.GetChild(0).gameObject;
+        coincount = 0;
+        SetCountText();
+        
+
     }
 
     private void Update()            // jump movement
@@ -89,6 +97,11 @@ public class PlayerMovement : MonoBehaviour
 
         StartDash();
         Flip();
+
+        if (Input.GetButtonUp("Attack"))
+        {
+            anim.ResetTrigger("isAttacking");
+        }
     }
 
     // Update is called once per frame
@@ -104,7 +117,10 @@ public class PlayerMovement : MonoBehaviour
         
         // constant movement, no momentum or sliding
         rb.velocity = new Vector2(horizontal * walkSpeed, rb.velocity.y);
+
     }
+
+   
 
     private void OnDrawGizmos()
     {
@@ -171,18 +187,7 @@ public class PlayerMovement : MonoBehaviour
     
     void OnAttack()
     {
-        /*
-        count = count + 1;
-        if (count % 2 == 1)
-        {
-            anim.SetBool("isAttacking", true);
-        }
-        else
-        {
-            anim.SetBool("isAttacking", false);
-        }
-        */
-        //anim.SetTrigger("isAttacking");
+        anim.SetTrigger("isAttacking");
         Debug.Log("Attacking");
         Hit(AttackTransform, AttackArea);
     }
@@ -244,11 +249,27 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             anim.SetBool("isJumping", true);
-            anim.SetBool("isAttacking", false);
+            //anim.SetBool("isAttacking", false);
             return false;
         }
     }
 
-    
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coins"))
+        {
+            Destroy(other.gameObject);
+            cm.coinCount++;
+
+            coincount = coincount + 1;
+            SetCountText();
+           
+        }
+    }
+
+    void SetCountText()
+    {
+        coinText.text = "Coins: " + coincount.ToString();
+    }
 
 }

@@ -10,7 +10,7 @@ public class EndLevel : MonoBehaviour
     {
         if (collision.gameObject.name == "Player")
         {
-            Invoke("CompleteLevel", 2f);
+            Invoke("CompleteLevel", 1f);
         }
            
     }
