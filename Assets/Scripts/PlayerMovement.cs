@@ -187,6 +187,7 @@ public class PlayerMovement : MonoBehaviour
     
     void OnAttack()
     {
+
         anim.SetTrigger("isAttacking");
         Debug.Log("Attacking");
         Hit(AttackTransform, AttackArea);
