@@ -58,8 +58,11 @@ public class PlayerMovement : MonoBehaviour
     public CoinManager cm;
     public TextMeshProUGUI coinText;
 
-    public AudioSource Sound;
-    public AudioSource Sound2;
+    [Header("Audio Settings")]
+    public AudioSource coinSound;
+    public AudioSource attackSound;
+    public AudioSource hitSound;
+    public AudioSource jumpSound;
 
 
     private void Awake()
@@ -120,7 +123,6 @@ public class PlayerMovement : MonoBehaviour
         
         // constant movement, no momentum or sliding
         rb.velocity = new Vector2(horizontal * walkSpeed, rb.velocity.y);
-
     }
 
    
@@ -190,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
     
     void OnAttack()
     {
-        Sound2.Play();
+        attackSound.Play();
         anim.SetTrigger("isAttacking");
         Debug.Log("Attacking");
         Hit(AttackTransform, AttackArea);
@@ -205,6 +207,7 @@ public class PlayerMovement : MonoBehaviour
             if (objectsToHit[i].GetComponent<Enemy>() != null)
             {
                 objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage);
+                hitSound.Play();
                 Debug.Log("Hit");
             }
         }
@@ -239,6 +242,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
         anim.SetBool("isJumping", !Grounded());
+        jumpSound.Play();
     }
 
     public bool Grounded()
@@ -263,7 +267,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Coins"))
         {
 
-            Sound.Play();
+            coinSound.Play();
             Destroy(other.gameObject);
             cm.coinCount++;
 
