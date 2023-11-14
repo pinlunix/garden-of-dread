@@ -57,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
     public CoinManager cm;
     public TextMeshProUGUI coinText;
-  
+    public AudioSource Sound;
+
 
     private void Awake()
     {
@@ -259,6 +260,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Coins"))
         {
+
+            Sound.Play();
             Destroy(other.gameObject);
             cm.coinCount++;
 
