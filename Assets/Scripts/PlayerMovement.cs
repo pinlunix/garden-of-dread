@@ -57,7 +57,9 @@ public class PlayerMovement : MonoBehaviour
 
     public CoinManager cm;
     public TextMeshProUGUI coinText;
+
     public AudioSource Sound;
+    public AudioSource Sound2;
 
 
     private void Awake()
@@ -188,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
     
     void OnAttack()
     {
-
+        Sound2.Play();
         anim.SetTrigger("isAttacking");
         Debug.Log("Attacking");
         Hit(AttackTransform, AttackArea);
