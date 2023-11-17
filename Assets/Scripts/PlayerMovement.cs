@@ -29,8 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing = false;
     private float dashingPower = 24f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 0.2f;
-    
+    private float dashingCooldown = 0.2f;   
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheckPoint;    // use as origin
@@ -64,6 +63,11 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource hitSound;
     public AudioSource jumpSound;
 
+    [Header("Health Settings")]
+    public int health;
+    public int maxHealth;
+    public bool invincible;
+
 
     private void Awake()
     {
@@ -75,6 +79,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Instance = this;
         }
+
+        health = maxHealth;
     }
     
     void Start()
@@ -206,12 +212,37 @@ public class PlayerMovement : MonoBehaviour
         {
             if (objectsToHit[i].GetComponent<Enemy>() != null)
             {
-                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage);
+                objectsToHit[i].GetComponent<Enemy>().EnemyHit
+                    (damage, (transform.position - objectsToHit[i].transform.position).normalized, 100);
                 hitSound.Play();
                 Debug.Log("Hit");
             }
         }
 
+    }
+
+    public void TakeDamage(float _damage)
+    {
+        health -= Mathf.RoundToInt(_damage);
+
+        Debug.Log("I'm taking damage!");
+        Debug.Log(health);
+
+        StartCoroutine(StopTakingDamage());
+    }
+
+    IEnumerator StopTakingDamage()
+    {
+        invincible = true;
+        //anim.SetTrigger("TakeDamage");
+        ClampHealth();
+        yield return new WaitForSeconds(1f);
+        invincible = false;
+    }
+
+    void ClampHealth()
+    {
+        health = Mathf.Clamp(health, 0, maxHealth);
     }
     
 
