@@ -18424,8 +18424,8 @@ MonoBehaviour:
   attackSound: {fileID: 1406418552}
   hitSound: {fileID: 1993708054}
   jumpSound: {fileID: 1003308227}
-  health: 20
-  maxHealth: 0
+  health: 0
+  maxHealth: 20
   invincible: 0
 --- !u!114 &460593834
 MonoBehaviour:
@@ -19827,7 +19827,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 1.5}
+  m_Size: {x: 0.73, y: 1.06}
   m_EdgeRadius: 0
 --- !u!61 &809488053
 BoxCollider2D:
