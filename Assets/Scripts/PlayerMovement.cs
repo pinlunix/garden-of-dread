@@ -51,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
     private GameObject attackArea = default;
     private int coincount;
     public int count;
+    private GameController gameControllerScript;
+    public HealthBar healthBarScript;
 
     public static PlayerMovement Instance;
 
@@ -62,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource attackSound;
     public AudioSource hitSound;
     public AudioSource jumpSound;
+    public AudioSource takeDamageSound;
 
     [Header("Health Settings")]
     public int health;
@@ -79,20 +82,19 @@ public class PlayerMovement : MonoBehaviour
         {
             Instance = this;
         }
-
-        health = maxHealth;
     }
     
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        gameControllerScript = GameObject.FindObjectOfType(typeof(GameController)) as GameController;
 
         attackArea = transform.GetChild(0).gameObject;
         coincount = 0;
         SetCountText();
-        
-
+        health = maxHealth;
+        healthBarScript.SetMaxHealth(maxHealth);
     }
 
     private void Update()            // jump movement
@@ -123,9 +125,6 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-
-        //Vector2 movement = new Vector2(movementX * 10, movementY * 10);
-        //rb.AddForce(movement);
         
         // constant movement, no momentum or sliding
         rb.velocity = new Vector2(horizontal * walkSpeed, rb.velocity.y);
@@ -218,15 +217,27 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Hit");
             }
         }
-
     }
 
-    public void TakeDamage(float _damage)
+    public void TakeDamage(float _damage, Vector2 knockback)
     {
-        health -= Mathf.RoundToInt(_damage);
+        if (!invincible)
+        {
+            health -= Mathf.RoundToInt(_damage);
+            healthBarScript.SetHealth(health);
 
-        Debug.Log("I'm taking damage!");
-        Debug.Log(health);
+            rb.AddForce(knockback, ForceMode2D.Impulse);
+
+            takeDamageSound.Play();
+
+            if (health <= 0)
+            {
+                gameControllerScript.Die();
+            }
+
+            Debug.Log("I'm taking damage!");
+            Debug.Log(health);
+        }
 
         StartCoroutine(StopTakingDamage());
     }
@@ -234,7 +245,6 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator StopTakingDamage()
     {
         invincible = true;
-        //anim.SetTrigger("TakeDamage");
         ClampHealth();
         yield return new WaitForSeconds(1f);
         invincible = false;
@@ -244,7 +254,6 @@ public class PlayerMovement : MonoBehaviour
     {
         health = Mathf.Clamp(health, 0, maxHealth);
     }
-    
 
     void OnJump()
     {

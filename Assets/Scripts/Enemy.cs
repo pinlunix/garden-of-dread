@@ -13,7 +13,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float speed;
 
     [SerializeField] protected float damage;
-
+    [SerializeField] protected float knockbackForce = 15f;
+    
+    protected Vector2 collideDir;
     protected float recoilTimer;
     protected Rigidbody2D rb;
 
@@ -61,14 +63,16 @@ public class Enemy : MonoBehaviour
 
     protected void OnTriggerStay2D(Collider2D _other)
     {
+        collideDir = (_other.transform.position - transform.position).normalized;
         if(_other.CompareTag("Player") && !PlayerMovement.Instance.invincible)
-        {
+        {            
             Attack();
         }
     }
 
     protected virtual void Attack()
     {
-        PlayerMovement.Instance.TakeDamage(damage);
+        Vector2 knockback = collideDir * knockbackForce;
+        PlayerMovement.Instance.TakeDamage(damage, knockback);
     }
 }

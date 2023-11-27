@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
 {
     Vector2 startPos;
     Rigidbody2D playerRb;
+    public HealthBar healthBarScript;
 
     private void Awake()
     {
@@ -29,12 +30,12 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         StartCoroutine(Respawn(0.5f));
     }
 
-    IEnumerator Respawn(float duration)
+    public IEnumerator Respawn(float duration)
     {
         playerRb.simulated = false;
         transform.localScale = new Vector3(0, 0, 0);
@@ -42,5 +43,9 @@ public class GameController : MonoBehaviour
         transform.position = startPos;
         transform.localScale = new Vector3(1, 1, 1);
         playerRb.simulated = true;
+
+        //reset Player health
+        PlayerMovement.Instance.health = PlayerMovement.Instance.maxHealth;
+        healthBarScript.SetMaxHealth(PlayerMovement.Instance.maxHealth);
     }
 }

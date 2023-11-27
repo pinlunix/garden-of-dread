@@ -7,6 +7,9 @@ using Debug = UnityEngine.Debug;
 
 public class MainMenu : MonoBehaviour
 {
+    public AudioSource buttonHover;
+    public AudioSource buttonClick;
+    
     public void PlayGame()
     {
         SceneManager.LoadScene("Game");
@@ -16,5 +19,15 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quit");
         Application.Quit();
+    }
+
+    public void HoverSound()
+    {
+        buttonHover.Play();
+    }
+
+    public void ClickSound()
+    {
+        buttonClick.Play();
     }
 }
