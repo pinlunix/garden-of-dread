@@ -18424,7 +18424,7 @@ MonoBehaviour:
   attackSound: {fileID: 1406418552}
   hitSound: {fileID: 1993708054}
   jumpSound: {fileID: 1003308227}
-  health: 0
+  health: 20
   maxHealth: 0
   invincible: 0
 --- !u!114 &460593834
@@ -19783,7 +19783,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &809488052
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19891,7 +19891,7 @@ MonoBehaviour:
   recoilFactor: 5
   isRecoiling: 0
   speed: 2
-  damage: 0
+  damage: 2
 --- !u!1 &842116951
 GameObject:
   m_ObjectHideFlags: 0
