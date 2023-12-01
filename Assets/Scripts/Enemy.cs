@@ -19,13 +19,17 @@ public class Enemy : MonoBehaviour
     protected float recoilTimer;
     protected Rigidbody2D rb;
 
-    // Start is called before the first frame update
-    protected virtual void Start()
+    protected enum EnemyStates
     {
-        
+        // GreenMob
+        GreenMob_Idle,
+        GreenMob_Flip
     }
 
-    protected virtual void Awake()
+    protected EnemyStates currentEnemyState;
+
+    // Start is called before the first frame update
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -33,6 +37,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        UpdateEnemyStates();
+
         if(health <= 0)
         {
             Destroy(gameObject);
@@ -68,6 +74,16 @@ public class Enemy : MonoBehaviour
         {            
             Attack();
         }
+    }
+
+    protected virtual void UpdateEnemyStates()
+    {
+
+    }
+
+    protected void ChangeState(EnemyStates _newState)
+    {
+        currentEnemyState = _newState;
     }
 
     protected virtual void Attack()

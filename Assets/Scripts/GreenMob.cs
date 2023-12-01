@@ -1,35 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class GreenMob : Enemy
 {
+    float timer;
+    [SerializeField] private float flipWaitTime;
+    [SerializeField] private float ledgeCheckX;
+    [SerializeField] private float ledgeCheckY;
+    [SerializeField] private LayerMask whatIsGround;
+
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb.gravityScale = 12f;
     }
 
-    protected override void Awake()
+    protected override void UpdateEnemyStates()
     {
-        base.Awake();
-    }
-
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-
-        if (!isRecoiling)
+        switch (currentEnemyState)
         {
-            transform.position = Vector2.MoveTowards
-                (transform.position, new Vector2(PlayerMovement.Instance.transform.position.x, 
-                transform.position.y), speed * Time.deltaTime);
-        }
-    }
+            case EnemyStates.GreenMob_Idle:
+                // enemy will flip after hitting wall boundary (invisible, but enemy is bounded between two walls for movement)
+                // or when reaching a ledge
+                Vector3 _ledgeCheckStart = transform.localScale.x > 0 ? new Vector3(ledgeCheckX, 0) : new Vector3(-ledgeCheckX, 0);
+                Vector2 _wallCheckDir = transform.localScale.x > 0 ? transform.right : -transform.right;
 
-    public override void EnemyHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
-    {
-        base.EnemyHit(_damageDone, _hitDirection, _hitForce);
+                if (!Physics2D.Raycast(transform.position + _ledgeCheckStart, Vector2.down, ledgeCheckY, whatIsGround)
+                    || Physics2D.Raycast(transform.position, _wallCheckDir, ledgeCheckX, whatIsGround))
+                {
+                    ChangeState(EnemyStates.GreenMob_Flip);
+                }
+
+                if(transform.localScale.x > 0)
+                {
+                    rb.velocity = new Vector2(speed, rb.velocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(-speed, rb.velocity.y);
+                }
+                break;
+            case EnemyStates.GreenMob_Flip:
+                timer += Time.deltaTime;
+
+                if(timer > flipWaitTime)
+                {
+                    timer = 0;
+                    transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+                    ChangeState(EnemyStates.GreenMob_Idle);
+                }
+                break;
+        }
     }
 }
