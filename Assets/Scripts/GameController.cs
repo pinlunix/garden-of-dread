@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
         {
             Die();
         }
-        if (collision.CompareTag("Mob"))
+        if (collision.CompareTag("Enemy"))
         {
             Die();
         }

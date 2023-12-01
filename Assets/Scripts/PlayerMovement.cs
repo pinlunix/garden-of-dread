@@ -31,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
     private float dashingTime = 0.2f;
     private float dashingCooldown = 0.2f;   
 
+
+
+    private int playerHealth = 5;
+
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheckPoint;    // use as origin
     [SerializeField] private float groundCheckY = 0.2f;     // define distance of ray
