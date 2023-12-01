@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4756714002038520263}
   - component: {fileID: 7240400976485940812}
-  - component: {fileID: 8177507188719871839}
+  - component: {fileID: 7598206946837560861}
   m_Layer: 0
   m_Name: Thorns
   m_TagString: Thorns
@@ -85,8 +85,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!68 &8177507188719871839
-EdgeCollider2D:
+--- !u!61 &7598206946837560861
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -117,26 +117,16 @@ EdgeCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0024709702, y: -0.2571087}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.500003, y: 1.0142174}
+    oldSize: {x: 0.96875, y: 0.5}
+    newSize: {x: 0.96875, y: 0.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.93411624, y: 0.5}
   m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.4405724, y: -0.5195501}
-  - {x: -0.48252004, y: -0.48156035}
-  - {x: -0.48655275, y: -0.4037999}
-  - {x: -0.4606473, y: -0.3433336}
-  - {x: -0.40674376, y: 0.016155124}
-  - {x: -0.2815636, y: -0.031340122}
-  - {x: -0.15691382, y: -0.19065881}
-  - {x: -0.051735334, y: -0.04948342}
-  - {x: 0.018424213, y: -0.045654655}
-  - {x: 0.04663299, y: -0.04916179}
-  - {x: 0.08074183, y: -0.22494638}
-  - {x: 0.16175875, y: -0.23477697}
-  - {x: 0.30870813, y: -0.32770073}
-  - {x: 0.36524016, y: -0.14276469}
-  - {x: 0.44962853, y: -0.14256334}
-  - {x: 0.48179445, y: -0.5141392}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
