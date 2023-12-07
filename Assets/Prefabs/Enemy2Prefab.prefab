@@ -197,7 +197,7 @@ MonoBehaviour:
   health: 5
   recoilLength: 5
   recoilFactor: 5
-  isRecoiling: 1
+  isRecoiling: 0
   speed: 3
   damage: 2
   knockbackForce: 15
