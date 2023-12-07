@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     protected Vector2 collideDir;
     protected float recoilTimer;
     protected Rigidbody2D rb;
+    private Animator anim;
 
     protected enum EnemyStates
     {
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -73,6 +75,7 @@ public class Enemy : MonoBehaviour
         if(_other.CompareTag("Player") && !PlayerMovement.Instance.invincible)
         {            
             Attack();
+            anim.SetBool("isAttacking", true);
         }
     }
 
