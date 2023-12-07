@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Thorns
   - Coins
+  - Key
   layers:
   - Default
   - TransparentFX
@@ -40,6 +41,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG3
+    uniqueID: 4018674121
+    locked: 0
+  - name: BG2
+    uniqueID: 2080668293
+    locked: 0
   - name: Background
     uniqueID: 426637909
     locked: 0
