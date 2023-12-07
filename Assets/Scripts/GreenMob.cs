@@ -20,12 +20,7 @@ public class GreenMob : Enemy
 
     protected override void UpdateEnemyStates()
     {
-        if(health <= 0)
-        {
-            Death(0.05f);
-        }
-        
-        switch (GetCurrentEnemyState)
+        switch (currentEnemyState)
         {
             case EnemyStates.GreenMob_Idle:
                 // enemy will flip after hitting wall boundary (invisible, but enemy is bounded between two walls for movement)
