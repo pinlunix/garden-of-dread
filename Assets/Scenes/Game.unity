@@ -22155,7 +22155,7 @@ GameObject:
   - component: {fileID: 445445215}
   - component: {fileID: 445445214}
   - component: {fileID: 445445213}
-  - component: {fileID: 445445219}
+  - component: {fileID: 445445220}
   m_Layer: 0
   m_Name: Enemy3 (1)
   m_TagString: Untagged
@@ -22323,7 +22323,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &445445219
+--- !u!114 &445445220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22332,22 +22332,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 445445212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5833a816aa37ed1478b2b580d7444ec3, type: 3}
+  m_Script: {fileID: 11500000, guid: 64cbb301ee32c38448b5b46aa7d3e565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 5
+  health: 2
   recoilLength: 2
   recoilFactor: 2
   isRecoiling: 0
-  speed: 2
-  damage: 5
+  speed: 1
+  damage: 1
   knockbackForce: 15
-  flipWaitTime: 0
-  ledgeCheckX: 0
-  ledgeCheckY: 0
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &478278871 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2549712831977751515, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
