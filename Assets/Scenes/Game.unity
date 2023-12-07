@@ -27458,6 +27458,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 913464232453321825, guid: 45d8d4ebb325d5647a00a3841002706c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2832421787618307579, guid: 45d8d4ebb325d5647a00a3841002706c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -27961,6 +27965,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1494739456877511632, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 2.6098938
+      objectReference: {fileID: 0}
     - target: {fileID: 2447303711181316466, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -28043,11 +28051,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2549712831977751515, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
       propertyPath: m_fontSize
-      value: 44.55
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2549712831977751515, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2549712831977751515, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
       propertyPath: m_enableAutoSizing
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2549712831977751515, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
       propertyPath: m_VerticalAlignment
@@ -28060,6 +28072,50 @@ PrefabInstance:
     - target: {fileID: 2549712831977751515, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2949347444830869073, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2949347444830869073, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.300003
+      objectReference: {fileID: 0}
+    - target: {fileID: 2961786638758101945, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364093711189198676, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364093711189198676, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364093711189198676, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364093711189198676, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364093711189198676, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364093711189198676, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -63
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975191054182532748, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703346193710945892, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
+      propertyPath: m_Interactable
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8254454661802113199, guid: a0bf80723eeb8db49bd9007f0d1f4810, type: 3}
       propertyPath: Player
@@ -28078,6 +28134,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2012179052}
+  - {fileID: 1455658783}
   - {fileID: 1506027967366758154}
   - {fileID: 290995599}
   - {fileID: 1713626139}
@@ -28090,4 +28147,8 @@ SceneRoots:
   - {fileID: 8917449357856005186}
   - {fileID: 1180271856}
   - {fileID: 6000070932765421200}
-  - {fileID: 1455658783}
+  - {fileID: 1522220096}
+  - {fileID: 1034136767}
+  - {fileID: 1423703930192417863}
+  - {fileID: 761518063}
+  - {fileID: 445445218}
