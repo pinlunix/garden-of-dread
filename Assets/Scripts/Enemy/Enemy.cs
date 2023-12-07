@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using UnityEngine.InputSystem;
 
 public class Enemy : MonoBehaviour
 {
@@ -19,33 +20,46 @@ public class Enemy : MonoBehaviour
     protected float recoilTimer;
     protected Rigidbody2D rb;
     private Animator anim;
+    protected SpriteRenderer sr;
 
     protected enum EnemyStates
     {
         // GreenMob
         GreenMob_Idle,
-        GreenMob_Flip
+        GreenMob_Flip,
+
+        // FlyingMob
+        FlyingMob_Idle,
+        FlyingMob_Chase,
+        FlyingMob_Stunned,
+        FlyingMob_Death
     }
 
     protected EnemyStates currentEnemyState;
+
+    protected virtual EnemyStates GetCurrentEnemyState{
+        get {
+            return currentEnemyState;
+        }
+        set{
+            if(currentEnemyState != value){
+                currentEnemyState = value;
+                ChangeCurrentAnimation();
+            }
+        }
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        UpdateEnemyStates();
-
-        if(health <= 0)
-        {
-            Destroy(gameObject);
-        }
-
         if (isRecoiling)
         {
             if (recoilTimer < recoilLength)
@@ -57,6 +71,9 @@ public class Enemy : MonoBehaviour
                 isRecoiling = false;
                 recoilTimer= 0;
             }
+        }
+        else{
+            UpdateEnemyStates();
         }
     }
 
@@ -79,14 +96,22 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    protected virtual void Death(float _destroyTime){
+        Destroy(gameObject, _destroyTime);
+    }
+
     protected virtual void UpdateEnemyStates()
     {
 
     }
 
+    protected virtual void ChangeCurrentAnimation(){
+
+    }
+
     protected void ChangeState(EnemyStates _newState)
     {
-        currentEnemyState = _newState;
+        GetCurrentEnemyState = _newState;
     }
 
     protected virtual void Attack()

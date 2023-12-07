@@ -161,7 +161,6 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Dash());
             dashed = true;
-            Debug.Log("Dashing");
         }
 
         if (Grounded())
@@ -195,7 +194,7 @@ public class PlayerMovement : MonoBehaviour
 
         anim.SetBool("isRunning", movementX != 0 && Grounded());
 
-        Debug.Log("moving");
+        
         Debug.Log(rb.velocity.x);
     }
     
@@ -203,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
     {
         attackSound.Play();
         anim.SetTrigger("isAttacking");
-        Debug.Log("Attacking");
+        
         Hit(AttackTransform, AttackArea);
     }
     
@@ -218,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
                 objectsToHit[i].GetComponent<Enemy>().EnemyHit
                     (damage, (transform.position - objectsToHit[i].transform.position).normalized, 100);
                 hitSound.Play();
-                Debug.Log("Hit");
+                
             }
         }
     }
@@ -276,7 +275,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
                 doubleJump = !doubleJump;
-                Debug.Log("Jumped");
+                
             }
         }
         // if jump button released and player is moving on y axis
